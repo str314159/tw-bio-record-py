@@ -1,16 +1,23 @@
 import requests
 import json
 import datetime
+import os
 
 config_open = open("config.json","r")
 config_load = json.load(config_open)
-list_open = open("list.json", "r")
+list_open = open("list.json", "r+")
 list_load = json.load(list_open)
 
 #定数の設定
 bearer_token = config_load["token"]["bearer"]
 url_before = "https://api.twitter.com/2/users/"
 today = str(datetime.datetime.now())
+i = 0
+
+if not os.path.isfile("bio_storing_data.json"):
+    g = open('bio_storing_data.json','w',encoding='UTF-8')
+    g.write({})
+    g.close
 
 try:
     json_open = open('bio_storing_data.json','r',encoding='UTF-8')
@@ -51,6 +58,7 @@ for account in list_load["data"]:
     username = account["username"]
     if "id" not in account:
         account.setdefault("id",get_userId(username))
+        i += 1
     id = account["id"]
     bio = get_user_bio(id)
     if username in data:
@@ -69,9 +77,10 @@ for account in list_load["data"]:
                 'bio':bio            
             }
         ])
- 
-list_rewrite = open("list.json", "w")
-json.dump(list_load,list_rewrite,indent=4,ensure_ascii=False)
+if i > 0: 
+    list_rewrite = open("list.json", "w")
+    json.dump(list_load,list_rewrite,indent=4,ensure_ascii=False)
+
 f = open('bio_storing_data.json', 'w', encoding='UTF-8')
 json.dump(data,f,indent=4,ensure_ascii=False)
 f.close
