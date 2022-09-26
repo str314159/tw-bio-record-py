@@ -2,3 +2,5 @@ config.json
 #APIキーの格納庫
 list.json
 #記録したいアカウントのリスト
+bio_storing_data.json
+#実際に保存したデータ
