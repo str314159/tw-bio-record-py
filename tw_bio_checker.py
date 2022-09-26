@@ -23,8 +23,12 @@ try:
     json_open = open('bio_storing_data.json','r',encoding='UTF-8')
     data = json.load(json_open)
 except:
-    print("json load error")
-    raise ValueError("error!")
+    flag = input("data reset? Yes or No")
+    if flag == "Yes":
+        data = {}
+    else:
+        print("json load error")
+        raise ValueError("error!")
 
 #認証用の関数
 def bearer_oauth(r):
